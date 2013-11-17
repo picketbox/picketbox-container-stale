@@ -74,18 +74,18 @@ public abstract class AbstractServerLoginModule implements LoginModule
    private static final String USE_FIRST_PASSWORD = "useFirstPass";
    private static final String PRINCIPAL_CLASS = "principalClass";
    private static final String UNAUTHENTICATED_IDENTITY = "unauthenticatedIdentity";
-  
+
    private static final String[] ALL_VALID_OPTIONS =
    {
 	   PASSWORD_STACKING,USE_FIRST_PASSWORD,PRINCIPAL_CLASS,UNAUTHENTICATED_IDENTITY,
 	   SecurityConstants.SECURITY_DOMAIN_OPTION
    };
-   
+
    private HashSet<String> validOptions;
-   
+
    protected Subject subject;
-   protected CallbackHandler callbackHandler; 
-   protected Map sharedState; 
+   protected CallbackHandler callbackHandler;
+   protected Map sharedState;
    protected Map options;
 
    /** Flag indicating if the shared credential should be used */
@@ -116,7 +116,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
     *   taking a String argument for the princpal name.
     * @option unauthenticatedIdentity: the name of the principal to asssign
     * and authenticate when a null username and password are seen.
-    * 
+    *
     * @param subject the Subject to update after a successful login.
     * @param callbackHandler the CallbackHandler that will be used to obtain the
     *    the user identity and credentials.
@@ -139,7 +139,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
     	  // otherwise, add our own and check all options against the "valid" list
          addValidOptions(ALL_VALID_OPTIONS);
          checkOptions();
-      }      
+      }
       /* Check for password sharing options. Any non-null value for
          password_stacking sets useFirstPass as this module has no way to
          validate any shared password.
@@ -207,7 +207,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
     method adds the getIdentity() value to the subject getPrincipals() Set.
     It also adds the members of each Group returned by getRoleSets()
     to the subject getPrincipals() Set.
-    
+
     @see javax.security.auth.Subject;
     @see java.security.acl.Group;
     @return true always.
@@ -264,7 +264,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
       PicketBoxLogger.LOGGER.traceBeginAbort();
       return true;
    }
-   
+
    /** Remove the user identity and roles added to the Subject during commit.
     @return true always.
     */
@@ -282,9 +282,9 @@ public abstract class AbstractServerLoginModule implements LoginModule
       return true;
    }
    //--- End LoginModule interface methods
-   
+
    // --- Protected methods
-   
+
    /** Overriden by subclasses to return the Principal that corresponds to
     the user primary identity.
     */
@@ -297,7 +297,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
     @return Group[] containing the sets of roles
     */
    abstract protected Group[] getRoleSets() throws LoginException;
-   
+
    protected boolean getUseFirstPass()
    {
       return useFirstPass;
@@ -344,7 +344,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
     * @param username the name of the principal
     * @return the principal instance
     * @throws java.lang.Exception thrown if the custom principal type cannot be created.
-    */ 
+    */
    @SuppressWarnings("unchecked")
    protected Principal createIdentity(String username)
       throws Exception
@@ -365,7 +365,7 @@ public abstract class AbstractServerLoginModule implements LoginModule
       }
       return p;
    }
-   
+
    protected Group getCallerPrincipalGroup(Set<Principal> principals)
    {
       Group callerGroup = null;
@@ -387,18 +387,18 @@ public abstract class AbstractServerLoginModule implements LoginModule
    /**
     * Each subclass should call this from within their initialize method BEFORE calling super.initialize()
     * The base class will then check the options
-    * 
+    *
     * @param moduleValidOptions : the list of options the subclass supports
     */
    protected void addValidOptions(final String[] moduleValidOptions)
    {
 	   if (validOptions==null)
 	   {
-          validOptions = new HashSet<String>();
+	        validOptions = new HashSet<String>(moduleValidOptions.length);
 	   }
 	   validOptions.addAll(Arrays.asList(moduleValidOptions));
    }
-   
+
    /**
     * checks the collected valid options against the options passed in
     * Override when there are special needs like for the SimpleUsersLoginModule
